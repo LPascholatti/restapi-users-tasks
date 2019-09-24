@@ -17,6 +17,20 @@ const User = sequelize.define('user', {
     }
 });
 
+const Task = sequelize.define('task', {
+  userId: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+  },
+  description: {
+      type: Sequelize.STRING
+  },
+  completed: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+  }
+})
+
 // Create a new user account
 
 app.post('/users', (req, res, next) => {
@@ -127,18 +141,9 @@ app.get('/users/:userId/tasks/:taskId', (req, res, next) => {
         .catch(next)
 })
 
-const Task = sequelize.define('task', {
-    userId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-    },
-    description: {
-        type: Sequelize.STRING
-    },
-    completed: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false
-    }
+
+app.post('/echo', (req, res) => {
+  res.json(req.body)
 })
 
 sequelize.sync()
@@ -147,9 +152,5 @@ sequelize.sync()
         console.error('Unable to create tables, shutting down...', err);
         process.exit(1);
     })
-
-app.post('/echo', (req, res) => {
-    res.json(req.body)
-})
 
 app.listen(port, () => console.log("listening on port " + port))
